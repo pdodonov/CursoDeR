@@ -1,0 +1,1259 @@
+---
+title: "Tutorial introduório ao R"  
+author: "Pavel Dodonov"  
+date: "2021-09-15"  
+output: pdf_document  
+toc: true  
+toc_depth: 2  
+number_sections: true  
+fontsize: 11pt  
+---
+
+# Apresentação  
+
+Este tutorial foi produzido para a disciplina *BIOB66 - Estatística Aplicada à Biologia*, dos cursos de Graduação em Ciências Biológicas do *Instituto de Biologia, Universidade Federal da Bahia (UFBA)*, pelo Prof. Dr. Pavel Dodonov - (pdodonov@gmail.com), do Laboratório de Ecologia Espacial.  
+    
+**Objetivo:** fornecer ferramentas básicas para alguém realizar suas análises estatísticas em R.    
+
+## Baixando o R  
+    
+Para baixar o R, acesse este site: https://cran.r-project.org/    
+Selecione a opção de Download correspondente ao seu sistema operacional e siga as instruções!    
+Além do R, recomendo baixar um software que auxilie na edição dos códigos.    
+Algumas possibilidades são:    
+- R Studio - https://www.rstudio.com/ (multiplataforma)    
+- TINN-R - https://sourceforge.net/projects/tinn-r/ (Windows)    
+- Sublime Text - https://www.sublimetext.com/ (multiplataforma)    
+    
+Existem ótimos materiais sobre R online. Algumas indicações:    
+- Por que vale a pena usar o R?, por Marco Mello: https://marcoarmello.wordpress.com/2019/06/03/rstats/    
+- Um tutorial introdutório, em texto, por Pavel Dodonov: https://anotherecoblog.wordpress.com/2017/03/15/r-primeiros-passos-inclusive-em-linux/    
+- Um vídeo-tutorial introdutório, por Pavel Dodonov: https://www.youtube.com/watch?v=7rqTbfZQB-o    
+- Vídeo-curso de programação em R, por Bruno Vilela: https://www.youtube.com/playlist?list=PL3U7PUKvYnzAZAEoFcjGLVkIML2ZGGl6t    
+    
+    
+    
+# Introdução: operações matemáticas, objetos, estatística descritiva  
+    
+Se você usa R em Windows: vá em arquivo (file), novo script (new script) e escreva seus comandos na janela que abrir.     
+Não esqueça de salvar o script!     
+Salve em uma pasta que você tenha permissão para editar.     
+Para executar os comandos escritos, você pode pressionar as teclas Control e R (CTRL + R). Isso executa a linha inteira ou a parte selecionada.    
+    
+Se você usa R em Linux: escreva os comandos em um editor de texto (eu sugiro o Sublime Text). Para executar um comando, selecione a parte que deseja executar e copie ela para o terminal usando o atalho SHIFT + INSERT, e aperte ENTER.    
+    
+Se você usa R Studio: comandos podem ser executados usando o atalho CTRL+ENTER (Windows) ou COMMAND+ENTER (Mac).    
+    
+Texto presseguido do símbolo "#" é entendido como comentários:    
+    
+```    
+## Este texto não é executado pelo R. Use comentários para explicar     
+## o que você está fazendo! Seu eu-futuro vai te agradecer. :-)    
+```    
+    
+O R pode ser usado como uma calculadora:    
+```{r  comment='>'}    
+1+1 # Soma    
+2*4 # Multiplicação    
+2/4 # Divisão    
+4^3 # Potenciação    
+```    
+    
+Podemos criar sequências de números:    
+```{r  comment='>'}    
+1:4 # Sequência de números inteiros, de 1 a 4    
+4:1 # Sequência de números inteiros, de 4 a 1    
+```    
+    
+Podemos fazer operações matemáticas com sequências de números    
+```{r  comment='>'}    
+1:4 + 1 # Adiciona 1 a cada valor    
+1:4 * 5:8 # Multiplica 1 por 5, 2 por 6, 3 por 7, 4 por 8    
+1:4 / 1:2 # Divide 1 por 1, 2 por 2, 3 por 1, 4 por 2    
+```    
+    
+Podemos também juntar valores sem ser em sequência    
+```{r  comment='>'}    
+c(1,3,6) # Cria um vetor com os valores 1, 3, 6    
+c(1,3,6) + c(5, 7) # Soma 1 com , 3 com 7, 6 com 5    
+1:10 / c(2,5) # Divide 1 por 2, 2 por 5, 3 por 2, ..., 10 por 5    
+```    
+    
+Reparem no aviso: "o comprimento do objeto maior não é múltiplo do comprimento do objeto menor".    
+Comprimento é o número de elementos em um objeto.    
+    
+Podemos criar sequências de valores não necessariamente inteiros    
+``` {r}    
+seq(from=0, to=5, length.out=10)     
+# Cria 10 valores de 0 a 5, em progressão aritmética    
+seq(from=0, to=5, by=0.6)     
+# Cria valores de 0 a aproximadamente 5, variando de 0.6 em 0.6    
+```    
+    
+*c* e *seq* são funções.     
+Funções são basicamente "coisas que fazem coisas", e elas têm argumentos que dizem quais coisas exatamente precisam ser feitas. Por exemplo, a função *c(1,3,6)* junta os números 1, 3 e 6 em um único objeto.     
+A função *seq* tem os argumentos from (definindo o valor mínimo), *to* (definindo o valor máximo), *length.out* (definindo o número de valores a serem criados), e *by* (definindo a diferença entre valores adjacentes).    
+
+Para encontrar informações sobre como uma função funciona, você pode usar a ajuda do R, escrevendo um ponto de interrogação e o nome da função, por exemplo *?seq*.  
+    
+R é uma linguagem orientada a objetos. Isso significa que tudo (ou quase tudo) que fazemos deve ser armazenado como objetos.    
+    
+Objetos são coisas que têm um nome e contêm alguma informação.    
+Podem conter números, texto, combinações de números e texto, etc.    
+    
+Um objeto pode ser criado usando o sinal de igual = ou usando a sintaxe <-    
+Na prática, tanto faz; eu prefiro usar <-    
+    
+```{r  comment='>'}    
+sequencia1 <- 1:10    
+sequencia2 <- seq(10,13, length.out=10)    
+```    
+    
+Assim criamos dois objetos. Um é uma série de números de 1 a 10 e outro é uma série de números de 10 a 13.    
+    
+Para visualizar o objeto, basta invocá-lo pelo nome:    
+    
+```{r  comment='>'}    
+sequencia1    
+sequencia2    
+```    
+    
+**Importante:** Evitem acentos e outros caracteres especiais!    
+
+## Graficos simples  
+
+Fazendo um gráfico de dispersão de uma em função da outra:    
+```{r}    
+plot(sequencia2 ~ sequencia1)    
+```    
+O sinal "~" significa "em função de".  
+
+Dando nomes aos eixos X e Y e um nome ao gráfico, e deixando as bolinhas coloridas:  
+
+```{r comment=">")  
+plot(sequencia2 ~ sequencia1, xlab="Eixo X",ylab="Eixo Y",   
+    main="Meu gráfico lindo", col="purple")  
+```
+
+*xlab* define o nome do eixo X (eixo horizontal);  
+*ylab* define o nome do eixo Y (eixo vertical);  
+*main* define o nome do gráfico;  
+*col* define a cor dos símbolos;  
+
+## Estatística descritiva  
+
+O R também tem funções simples para cálculo de estatística descritiva.  
+As funções principais são:   
+*sum* (somatória),   
+*mean* (média),   
+*var* (variância),  
+*sd* (desvio-padrão),   
+*quantile* (quantis),   
+*median* (mediana),   
+*min* (valor mínimo),   
+*max* (valor máximo).   
+(Não há função para calcular a moda)  
+
+Assim, para as sequências criadas acima, podemos fazer:  
+```{r comment='>'}  
+sum(sequencia1) #soma  
+mean(sequencia1) #média  
+var(sequencia1) # variância  
+sd(sequencia1) # desvio-padrão (standard deviation"  
+quantile(sequencia1,probs=c(0.25,0.75))   
+# probs diz quais quantis queremos.   
+## No caso, vamos calcular os quantis 25% e 75%.  
+## Ou seja, 25% dos dados estão abaixo do quantil 0.25 e 75% estão  
+## abaixo do quantil 0.75.  
+median(sequencia1)
+min(sequencia1)
+max(sequencia1)
+```
+
+Podemos criar um vetor que combine estes valores todos:  
+```{r comment='>'}  
+resumo.sequencia1 <- c(sum(sequencia1), mean(sequencia1),   
+    var(sequencia1), sd(sequencia1),   
+    quantile(sequencia1,probs=c(0.25,0.75)),  
+    median(sequencia1), min(sequencia1), max(sequencia1))  
+```
+E podemos dar nomes a este vetor:  
+```{r comment='>'}  
+names(resumo.sequencia1) <- c("soma", "média", "variância",  
+    "desvio-padrão", "quantil 25%", "quantil 75%", "mediana",   
+    "mínimo", "máximo")  
+resumo.sequencia1
+```
+
+**Exercício:**
+Imagine que você foi para Krynn e mediu a biomassa de 10 dragões-vermelhos e 9 dragões-verdes.  
+Os valores medidos, em toneladas, foram:  
+Dragões-vermelhos: 1.2; 2.1; 2.0; 5.0; 1.1; 2.6; 2.5; 1.9; 1.6; 2.8  
+Dragões-verdes: 0.5; 0.7; 2.9; 0.5; 2.1; 2.7; 2.4; 1.4; 0.6  
+Calcule a somatória, média, variância, desvio-padrão, quantis 25 e 75%, mediana, mínimo e máximo destes valores e armazene os resultados em dois objetos.  
+
+
+## Tipos de objeto  
+
+Em R, podemos trabalhar com diferentes tipos de objetos.   
+Os tipos de objetos no geral se relacionam aos tipos de variáveis que podemos ter.  
+Para saber o tipo de um objeto, usamos o comando *str*,que nos dá a estrutura do objeto.  
+
+Veja abaixo exemplos de diferentes objetos:  
+
+```{r comment='>'}  
+# Números inteiros (variável quantitativa discreta):  
+objeto.discreto <- 3:6  
+str(objeto.discreto)
+# Números contínuos (variável quantitativa contínua):  
+objeto.continuo <- c(1.5, 4.2, 2, 0.8)  
+str(objeto.continuo)
+# Variável categórica, tratado como texto:  
+objeto.texto <- c("Amanda", "Alfredo", "Alfredo", "José")  
+str(objeto.texto)
+# Variável categórica, tratada como fator:  
+objeto.fator <- as.factor(objeto.texto) # Transforma um tipo em outro  
+str(objeto.fator) # A cada nome foi atribuído um número, ou nível.  
+# Verdadeiro-ou-falso - variável binária:  
+objeto.VF <- c(TRUE, TRUE, FALSE)  
+str(objeto.VF)
+objeto.VF2 <- c(T,T,F)  
+str(objeto.VF2)
+```
+
+Podemos escrever TRUE ou T e podemos escrever FALSE ou F.  
+Se fazemos uma operação lógica, obtemos um objeto do tipo verdadeiro-ou-falso:  
+
+```{r comment='>'}  
+objeto.discreto < 5 # Cada elemento é menor do que 5?  
+objeto.discreto <= 5 # Cada elemento é menor/igual a 5?  
+objeto.continuo > 2 # Cada elemento é maior do que 2?  
+objeto.continuo >= 2 # Cada elemento é maior/igual a 2?  
+objeto.texto == "Alfredo" # Cada elemento é igual a "Alfredo"?  
+objeto.fator != "Alfredo" # Cada elemento é diferente de "Alfredo"?  
+```
+
+Vamos retornar a isso no futuro.  
+
+Além disso, até agora trabalhamos apenas com objetos unidimensionais (uma série de números ou de outras coisas).   
+Também existem objetos do tipo *matrix* (matriz), *list* (lista) e *data.frame* (que eu traduzo como "planilha de dados").  
+
+Vamos explorar então estes diferentes tipos de objetos:  
+
+```{r comment='>'}  
+vetor1 <- 1:20  
+vetor1
+# Um vetor é uma sequências de números.  
+matriz1 <- matrix(1:20, ncol=4)   
+# ncol representa o número de colunas que teremos.  
+matriz1
+# Uma matriz é uma sequência de números organizada em linhas e   
+## colunas  
+lista1 <- list(vetor1, matriz1)  
+lista1
+# Uma lista é algo que contem objetos (que podem ser de diferentes   
+## tipos).  
+data.frame1 <- data.frame(objeto.discreto, objeto.continuo,   
+    objeto.texto, objeto.fator)  
+data.frame1
+# Um data.frame é uma mistura de matriz com lista.  
+# Um data.frame pode ter diferentes tipos de variáveis (fator,   
+## número etc),  
+## mas em forma de tabela.  
+```
+
+
+**Exercício:** Crie um data.frame com os dados dos dragões-vermelhos e dragões-verdes acima, no formato longo. Assim, você deverá ter uma coluna indicando a espécie de cada indivíduo (Dragão-vermelho   
+ou Dragão-verde) e outra coluna indicando o seu peso. A coluna indicando a espécie deverá ser do tipo factor. Não utilize acentos ou caracteres especiais!  
+
+# Simulando dados  
+
+
+ Às vezes queremos simular dados que seguem uma certa distribuição estatística (por exemplo, dados que seguem a distribuição normal).   
+O R tem diversas funções para isso.   
+Normalmente estas funções começam com a letra "r", e depois indicam de que tipo de distribuição estes dados provêm.   
+Por exemplo, para simularmos dados de uma distribuição normal usamos a função rnorm:  
+
+```{r comment='>'}  
+sim.normal <- rnorm(n=30, mean=0, sd=1)  
+sim.normal
+```
+
+Assim simulamos dados que seguem uma distribuição normal, com média 0 e desvio-padrão 1.   
+Para visualizarmos eles, podemos fazer um histograma:  
+
+```{r comment='>'}  
+hist(sim.normal)
+```
+
+Se quisermos definir o número de divisões de classe:  
+```{r comment='>'}  
+hist(sim.normal, breaks=10)  
+```
+
+É provável que essa curva não tenha uma aparência muito normal!   
+Isso acontece porque mesmo dados gerados aleatoriamente a partir de uma curva normal podem não se assemelhar muito a uma curva normal.  
+
+Outra forma de testa normalidade é fazer um gráfico de probabilidade normal, usando os seguintes comandos:  
+
+```{r comment='>'}  
+qqnorm(sim.normal)
+qqline(sim.normal)
+```
+
+Em uma distribuição normal, espera-se que os pontos coincidam razoavelmente bem com a linha.  
+
+Também podemos fazer um teste de normalidade, testando a hipótese nula de que os dados não diferem de uma curva normal. Ou seja, p-valores altos indicam normalidade.   
+Um teste muito usado para isso é o teste de Shapiro-Wilk:  
+
+```{r comment='>'}  
+shapiro.test(sim.normal)
+```
+
+Quanto mais alto for o p-valor, menos evidências temos para rejeitar a hipótese nula da normalidade.   
+Ou seja, p-valores altos indicam que os  dados provavelmente seguem sim uma distribuição normal.  
+
+Outra distribuição muito usada é a distribuição uniforme, em que todos os valores são igualmente prováveis.   
+Por exemplo, podemos gerar 30 números que seguem uma distribuição uniforme, entre 0 e 1:  
+
+```{r comment='>'}  
+sim.uniforme <- runif(n=30, min=0, max=1)  
+head(sim.uniforme)
+```
+
+Ao contrário da distribuição normal, aqui especificamos o valor mínimo e o valor máximo da distribuição.  
+
+Vamos novamente fazer os gráficos e testes que fizemos para a distribuição normal:  
+
+```{r comment='>'}  
+hist(sim.uniforme)
+
+qqnorm(sim.uniforme)
+qqline(sim.uniforme)
+
+shapiro.test(sim.uniforme)
+```
+É possível que mesmo neste caso o teste mostre que os dados se assemelham a uma distribuição normal!  
+
+
+**Exercício:**
+1) Simule 42 valores de uma distribuição normal, com média 25 e desvio-padrão 3;   
+2) Simule 42 valores de uma distribuição uniforme, variando de 0 a 100;   
+3) Faça um gráfico relacionando o primeiro conjunto de valores ao segundo.  
+
+**Mais um exercício:**   
+1) Simule 30 valores de uma distribuição uniforme, variando de 0 a 50;   
+2) Some a eles 30 valores de uma distribuição normal, com média 0 e desvio-padrão 2;   
+3) Faça um gráfico relacionando este segundo conjunto de valores ao primeiro.  
+
+
+# Como "abrir planilhas" (importar dados) dados no R  
+
+Normalmente temos nossos dados em arquivos de Excel ou LibreOffice.  
+Precisamos transformar eles em um formato que o R entenda.   
+Embora existam pacotes de R que abram arquivos de Excel, é melhor salvar nossa planilha em arquivo de texto.  
+
+Isso pode ser feito de ao menos duas formas.   
+Abra o arquivo "IntroAoR_alelopatia.xls" no LibreOffice Calc, e siga os passos abaixo:  
+(É possível fazer isso também em Excel, mas neste curso eu priorizo softwares livres.)  
+
+(Caso você não tenha este arquivo, você pode baixar ele, assim como o arquivo de texto, aqui: https://github.com/pdodonov/CursoDeR ).  
+
+*Possibilidade 1*: Vai em Arquivo (File), Salvar como (Save as), e, no tipo de arquivo, selecione "Text CSV (.csv)".   
+Mantenha selecionada a opção "Automatic file name extension".   
+Se a opção "Edit filter settings" estiver selecionada, você pode definir qual caracter (vírgula, ponto-e-vírgula, espaço, ou tabulação) irá separar  
+as colunas, na opção "Field delimiter".   
+Tome cuidado para que não seja o mesmo que o separador decimal que você usa.   
+Eu gosto de usar tabulações {Tab}.  
+
+*Possibilidade 2*: Seleciona o conjunto de dados inteiro e copie ele.   
+Abra o bloco de notas ou um programa equivalente (programas como Word e Writer NÃO servem para isso!) e copie os dados nele.  
+Salve com um nome que faça sentido, sem esquecer de colocar a extensão do arquivo: .txt ou .csv.  
+
+Não importa como você tenha salvo o arquivo, sugiro abrir ele no bloco de notas para verificar 1) qual é o separador de coluna e 2) qual é o separador decimal.  
+
+No meu computador, o separador decimal é ponto (.) e o separador de coluna que uso é a tabulação (tab).  
+
+**Para abrir este arquivo em R,** precisamos primeiro estabelecer o diretório, ou pasta, de trabalho. Usamos para isso o comando *setwd*:  
+
+```{r comment='>'}  
+setwd("/home/pavel/Profissional/Ensino/Disciplinas/Estatistica_grad/EstatisticaParaBiologia_UFBA_2021.2/tutorial")
+```
+
+O comando ficou cortado ao criar o PDF (não é possível ter quebras de linha no endereço da pasta); ele inteiro é assim:  
+*setwd("/home/pavel/Profissional/Ensino/Disciplinas/Estatistica_grad/EstatisticaParaBiologia_UFBA_2021.2/tutorial")*
+O comando acima é para o meu computador.   
+No seu computador o caminho será diferente!   
+E repare que as barras têm que ser ascendentes / que é o padrão Unix.   
+O padrão Windows de barras descendentes \ não funciona.  
+
+Para verificar a pasta de trabalho, use o comando *getwd*:  
+
+```{r comment='>'}  
+getwd()
+```
+
+*wd* vem de "working directory", ou diretório de trabalho.  
+*setwd* define o diretório de trabalho e *getwd* mostra ele.  
+
+O comando *list.files* mostra uma lista de arquivos que há na pasta:  
+
+```{r comment='>'}  
+list.files()
+```
+
+Vamos abrir o arquivo "IntroAoR_alelopatia.txt".  
+
+Usamos o comando read.table, inserindo nele:   
+- o nome do arquivo;   
+- o separador de coluna, que no caso são tabulações;   
+- e o separador decimal, que no meu computador são pontos:  
+
+```{r comment='>'}  
+read.table("IntroAoR_alelopatia.txt", sep="\t", dec=".")  
+```
+Este comando leu o arquivo, mas não o deixou guardado. Ou seja, não nos foi muito útil.  
+Como nós precisamos salvar este objeto no R, ou seja, dar um nome a ele.   
+Assim, vou chamar ele de "dados":  
+
+```{r comment='>'}  
+dados <- read.table("IntroAoR_alelopatia.txt", sep="\t", dec=".")  
+```
+
+Agora nossos dados estão armazenados no ambiente R e podemos trabalhar em cima deles. Mas primeiro precisamos ver como é a estrutura destes dados, usando o comando str:  
+
+```{r comment='>'}   
+str(dados)
+```
+O comando mostra que temos variáveis chamadas V1, V2, V3, V4 e V5; e todas elas são fatores, ou seja, variáveis categóricas.   
+Isso não parece certo!  
+
+O que acontece é que precisamos especificar que o nosso objeto de dados contem um cabeçalho, ou seja, nomes de colunas:  
+
+```{r comment='>'}  
+dados <- read.table("IntroAoR_alelopatia.txt",   
+    sep="\t", dec=".", header=TRUE)  
+str(dados)
+```
+
+Agora parece tudo certo! Temos cinco variáveis:   
+Extrato (categórica),   
+Concentracao (numérica),   
+Planta (números inteiros),   
+Epigeo (numérica) e Raiz (numérica).   
+São dados referentes ao efeito do extrato de uma espécie de planta sobre   
+o crescimento da raíz e da parte epígea de outra espécie de planta.   
+O extrato foi extraído de folhas jovens e de folhas maduras.  
+
+Se as variáveis ainda estiveram aparecendo como fatores para você, é possível que você precise substituir o separador decimal por vírgula.  
+Troque o argumento *dec="."* por *dec=","* e tente novamente. :-)  
+
+Outras formas (complementares) de explorar os dados:  
+
+```{r comment='>'}  
+head(dados) # mostra as primeiras linhas  
+tail(dados) # mostra as últimas linhas  
+summary(dados) # mostra algumas estatísticas de resumo  
+View(dados) # abre uma janela com a planilha  
+```
+# Algumas análises de dados  
+
+## Comparação de duas amostras usando o teste t de Student  
+
+Vamos comparar o tamanho da raiz com o tamanho da parte epígea (caule).  
+
+Vamos primeiro pegar apenas as plantas controle (nas quais a concentração do extrato é igual a 0)  
+
+```{r comment='>'}  
+dados.ctrl <- subset(dados, Concentracao == 0)  
+```
+Lembram dos testes lógicos?  
+Este comando diz algo como "No objeto dados, pegue apenas as linhas em queo valor de Concentração é igual (==) e zero e armazente elas no objeto dados.ctrl."  
+
+Vamos ver a estrutura deste objeto:  
+
+```{r comment='>'}  
+str(dados.ctrl)
+```
+
+Temos agora 80 observações.  
+
+Podemos criar dois objetos, um com o tamanho da parte epígea e outro com o tamanho da raiz:  
+
+```{r comment='>'}  
+dados.ctrl.raiz <- dados.ctrl$Raiz  
+dados.ctrl.epig <- dados.ctrl$Epigeo  
+```
+
+Ao usar o comando str, veremos que são vetores numérico:  
+
+```{r comment='>'}  
+str(dados.ctrl.raiz)
+str(dados.ctrl.epig)
+```
+
+Uma forma de comparar eles é usando histogramas.  
+Para um histograma ser eficiente, é interessante que o eixo X seja o mesmo para os dois grupos.  
+Podemos calcular a amplitude de variação para as duas variáveis:  
+
+```{r comment='>'}  
+amplitude.ctrl <- range(c(dados.ctrl.raiz, dados.ctrl.epig))  
+amplitude.ctrl
+```
+
+Os nossos valores variam de 1.20 a 68.73 cm.  
+
+
+**Exercício:**
+Calcule a amplitude de variação separadamento para o tamanho da raiz e para o tamanho da parte epígea.  
+
+
+Para fazermos um histograma, usamos o comando hist:  
+
+```{r comment='>'}  
+hist(dados.ctrl.raiz)
+# Para mudarmos a escala no eixo X dele, usamos o argumento xlim:  
+hist(dados.ctrl.raiz, xlim=amplitude.ctrl)  
+
+# Vamos agora fazer um gráfico desses para a parte epígea:  
+hist(dados.ctrl.epig, xlim=amplitude.ctrl)  
+```
+
+Reparem como o eixo X vai até 70, mas a partir de ~ 35 já não temos valores.  
+
+Para comparar os dois gráficos, precisamos primeiro criar uma área onde os dois serão plotados, um abaixo do outro.  
+(Se quiser mais informações sobre o comando *par*, posso indicar este texto: https://anotherecoblog.wordpress.com/2018/12/13/juntando-graficos-em-r/ )  
+
+Para isso, usamos o comando par:  
+
+```{r comment='>', fig.width=4, fig.height=6}  
+par(mfrow=c(2,1)) # Cria um espaço com duas linhas e uma coluna  
+hist(dados.ctrl.raiz, xlim=amplitude.ctrl)  
+hist(dados.ctrl.epig, xlim=amplitude.ctrl)  
+```
+
+Reparem como os valores da raiz são maiores.  
+Podemos também padronizar o número de classes (quebras):  
+
+```{r comment='>', fig.width=4, fig.height=6}  
+par(mfrow=c(2,1)) # Cria um espaço com duas linhas e uma coluna  
+hist(dados.ctrl.raiz, xlim=amplitude.ctrl, breaks=15)  
+hist(dados.ctrl.epig, xlim=amplitude.ctrl, breaks=15)  
+```
+
+Como o tamanho da parte epígea varia menos, as classes são menores.  
+Vamos então definir classes de 5 em 5 cm, de 0 a 70 cm:  
+
+```{r comment='>'}  
+classes <- seq(0,70, by=5)  
+classes
+```
+
+Fazemos novamente os histogramas:  
+
+```{r comment='>', fig.width=4, fig.height=6}  
+par(mfrow=c(2,1)) # Cria um espaço com duas linhas e uma coluna  
+hist(dados.ctrl.raiz, xlim=amplitude.ctrl, breaks=classes)  
+hist(dados.ctrl.epig, xlim=amplitude.ctrl, breaks=classes)  
+```
+
+Com as classes do mesmo tamanho, a comparação  fica mais fácil.  
+
+
+**Exercício:**
+Calcule as estatística descritiva (média, mediana, desvio-padrão e outras) para o tamanho do caule e da raiz no controle.  
+
+
+Para avaliar estatisticamente se as diferenças são significativas, podemos usar o teste t de Student:  
+
+```{r comment='>'}  
+t.test(dados.ctrl.raiz, dados.ctrl.epig)  
+```
+
+O p-valor de 2.434e-08 indica que há uma diferença altamente significativa.  
+2.434e-08 significa $2.434 * 10^{-8}$, ou seja, vezes dez elevado a menos oito.  
+Então o p-valor é de 0.00000002434, que é um valor bemmm baixo.  
+Portanto, a probabilidade de obter uma diferença como esta se a hipótese nula, de não haver diferença no tamanho entre raiz e parte epígea, for verdadeira é bemmm baixa.  
+
+O resultado também dá os comprimentos médios: 29.6 cm da raiz, 19.1 cm da parte epígea.  
+
+O teste t assume normalidade.   
+Vamos testar a normalidade de cada objeto?  
+
+```{r comment='>'}  
+shapiro.test(dados.ctrl.raiz)
+shapiro.test(dados.ctrl.epig)
+```
+
+O tamanho da raiz se assemelha a uma distribuição normal (p-valor relativamente alto), mas o da parte epígea não.  
+
+Embora o teste t seja robusto a desvios de normalidade, pode ser interessante fazer outro teste, o de Mann-Whitney, que é um teste não-paramétrico:  
+
+Esse teste também é conhecido como teste de Wilcoxon, e pode ser feito com a função wilcox.test:  
+
+```{r comment='>'}  
+wilcox.test(dados.ctrl.raiz, dados.ctrl.epig)  
+```
+
+Novamente, temos um p-valor altamente significativo.  
+
+**Exercício:**   
+Compare graficamente e estatisticamente o tamanho da raiz na concentração de 0.025 com o tamanho da raiz na concentração de 0.050.  
+
+
+
+## Comparação entre mais de dois grupos usando Análise de Variância (ANOVA)  
+
+Nós podemos tratar a Concentracao como uma variável contínua ou como uma variável categórica.   
+Para tratar ela como variável categórica, vamos criar uma nova coluna,  transformando ela em fator:  
+
+```{r comment='>'}  
+dados$Concentracao.cat <- as.factor(dados$Concentracao)  
+```
+
+O cifrão "$" indica que vamos trabalhar com uma coluna dentro do objeto dados.   
+O comando *as.factor* pega uma variável qualquer e a transforma em uma variável categórica.  
+
+Vamos também calcular o tamanho total das plantas:  
+```{r comment='>'}  
+dados$Total <- dados$Raiz + dados$Epigeo  
+```
+Tamanho total é a somatória do tamanho da raiz e da parte epígea.  
+
+Se olharmos novamente a estrutura dos dados, veremos duas novas colunas:  
+
+```{r comment='>'}  
+str(dados)
+```
+
+Vamos trabalhar apenas com o extrato das folhas maduras.   
+Para isso, vamos criar um novo objeto apenas com os dados correspondentes:  
+
+```{r comment='>'}  
+dados.maduro <- subset(dados, Extrato=="Maduro")   
+# Repare nos dois sinais de igual ==   
+## Usamos == pois é um teste lógico.  
+str(dados.maduro) # Reparem que temos 199 observações, não mais 392.  
+```
+
+Para ver a relação entre concentração e tamanho total das plantas, recomendo fazer uma junção de *jitter plot* com *box plot*.  
+
+Se fazemos um gráfico de uma variável contínua em função de uma categórica, o R automaticamente faz um boxplot:  
+
+```{r comment='>'}  
+plot(Total ~ Concentracao.cat, data=dados.maduro, range=0)  
+```
+
+Isso significa "Faça um gráfico da variável *Total* em função da variável *Concentracao.cat*, retirando elas do objeto *dados.maduro*."   
+O argumento *range=0* é específico para boxplots, e indica que não queremos que outliers sejam mostrados como pontos.  
+
+Para adicionar pontos, podemos fazer assim (vou criar novamente o gráfico para que o código fique todo no mesmo lugar):  
+```{r comment='>'}  
+plot(Total ~ Concentracao.cat, data=dados.maduro, range=0)  
+points(Total ~ jitter(  
+    as.numeric(Concentracao.cat)), data=dados.maduro, col="red")  
+```
+Primeiro, transformamos a variável categórica em uma numérica, usando o comando *as.numeric*.   
+A seguir, usamos jitter para adicionar um ruído aleatório.   
+O restante é como acima.   
+O comando *col="red"* faz com que os pontos sejam vermelhos.  
+
+Podemos mudar os nomes dos eixos, fazendo novamente o gráfico:  
+```{r comment='>'}  
+plot(Total ~ Concentracao.cat, data=dados.maduro,   
+    range=0, xlab="Concentração do extrato alelopático",   
+    ylab="Altura total (cm)",   
+    main="Efeito do extrato de folhas maduras")  
+# xlab: nome do eixo X; ylab: nome do eixo Y;   
+## main: nome geral do gráfico.  
+points(Total ~ jitter(  
+    as.numeric(Concentracao.cat)), data=dados.maduro, col="red")  
+```
+
+ Parece que há um efeito da concentração sobre o tamanho da planta.   
+Mas será significativo? Vamos fazer uma análise de variância!  
+
+```{r comment='>'}  
+anova.maduro <- aov(Total ~ Concentracao.cat, data=dados.maduro)  
+anova.maduro
+```
+
+Isso dá uma tabela de ANOVA parcial.   
+Para termos a tabela completa, usamos o comando summary:  
+```{r comment='>'}  
+summary(anova.maduro)
+```
+
+Para entender como interpretar o resultado de uma ANOVA e do teste *a posteriori* que usamos quando há uma diferença significativa, recomendo este material: https://anotherecoblog.wordpress.com/2020/11/24/como-interpretar-uma-anova/  
+
+Para fazer o teste *a posteriori* de Tukey, usamos o seguinte código sobre o objeto da ANOVA:  
+
+```{r comment='>'}  
+TukeyHSD(anova.maduro)
+```
+
+Ele compara cada par de concentrações entre si, retornando a diferença, o intervalo de confiança dessa diferença, e o p-valor.  
+
+Mas precisamos testar as premissas...   
+Normalidade e homogeneidade dos resíduos.  
+Para isso, vamos calcular os resíduos:  
+
+```{r comment='>'}  
+residuos.maduro <- resid(anova.maduro)  
+
+hist(residuos.maduro)   
+shapiro.test(residuos.maduro)   
+```
+O histograma mostra que os resíduos estão muito concentrados no meio.  
+O teste de normalidade mostra uma diferença marginalmente significativa (p=0.036) entre os resíduos e o que seria esperado para uma distribuição normal.  
+
+Havendo desvios da normalidade, uma alternativa é fazer o teste de Kruskal-Wallis:  
+
+```{r comment='>'}  
+kruskal.test(Total ~ Concentracao.cat, data=dados.maduro)  
+```
+
+Este teste mostra que há diferenças altamente significativas.   
+
+Uma forma de avaliar qual grupo difere de qual grupo é usando o teste de Dunn. Para fazer ele, primeiro precisamos instalar o pacote FSA. Pacotes são conjuntos de funções adicionais ao que já tem no R. Podem ser instalados com a função install.packages:  
+
+*install.packages("FSA")*
+
+Reparem que o nome do pacote vai entre aspas.  
+Você só precisa instalar o pacote uma vez; depois de instalado, ele fica no seu computador pode ser carregado.  
+
+Depois de instalado, carregamos ele com a função library:  
+
+```{r comment='>'}  
+library(FSA)
+```
+
+Reparem que agora o nome do pacote não está entre parênteses.  
+
+Agora podemos fazer o teste:  
+
+```{r comment='>'}  
+dunnTest(Total ~ Concentracao.cat, data=dados.maduro)  
+```
+
+Praticamente todas as diferenças foram significativas, com excessão de 0 vs 0.025 (p=0.3) e 0.075 e 0.10 (p=0.6).  
+
+
+**Exercício:**   
+Avalie como as diferentes concentrações do extrato de folhas jovens afetam o tamanho da raiz.   
+Apresente os resultados na forma de figura e um texto.  
+
+
+
+## Teste de premissas: normalidade e homoscedasticidade  
+
+Como já vimos nos exemplos acima, análises como ANOVA e regressão linear (a qual exploraremos mais a frente) assumem que os resíduos têm   
+distribuição normal e, além disso, têm homogeneidade de variâncias (homoscedasticidade).  
+
+No exemplo anterior, avaliamos o efeito do extrato de folhas maduras sobre o tamanho total das plantas:  
+
+```{r comment='>'}  
+anova.maduro <- aov(Total ~ Concentracao.cat, data=dados.maduro)  
+summary(anova.maduro)
+```
+
+Este resultado mostra que há uma relação significativa. Mas será este resultado confiável?  
+   
+Vamos extrair os resíduos:  
+
+```{r comment='>'}  
+resid.maduro <- resid(anova.maduro)  
+```
+
+**Análise gráfica de normalidade:**  
+
+```{r comment='>'}  
+hist(resid.maduro)   
+qqnorm(resid.maduro)
+qqline(resid.maduro)
+```
+O histograma mostra uma distribuição mais ou menos normal, mas com muitos valores no centro (leptocúrtica).  
+Em relação ao outro gráfico, em uma distribuição normal espera-se que os pontos fiquem próximos à linha. Não estão.  
+
+Teste de normalidade:  
+
+```{r comment='>'}  
+shapiro.test(resid.maduro)   
+```
+
+A probabilidade de uma distribuição normal gerar estes resíduos é de 0.036. Podemos dizer que há boa evidência de que os resíduos não seguem distribuição normal.  
+
+**Análise gráfica de homoscedasticidade:**  
+
+```{r comment='>'}  
+plot(resid.maduro ~ dados.maduro$Concentracao.cat)  
+```
+Plotando os resíduos em função das concentrações, notamos que eles são mais espalhados em concentrações menores.  
+
+Portanto, ambas as premissas foram violadas. Uma possibilidade é transformar os dados.   
+Podemos, por exemplo, transformar em logaritmo:  
+
+```{r comment='>'}  
+dados.maduro$Total.log <- log(dados.maduro$Total)  
+anova.maduro.log <- aov(Total.log ~ Concentracao.cat,   
+    data=dados.maduro)  
+resid.maduro.log <- resid(anova.maduro.log)  
+hist(resid.maduro.log)
+shapiro.test(resid.maduro.log)
+```
+ Estamos mais longe da normalidade do que estávamos antes.  
+
+```{r comment='>'}  
+plot(resid.maduro.log ~ dados.maduro$Concentracao.cat)  
+```
+A heteroscedasticidade diminuiu, mas apareceram alguns *outliers*.  
+
+Outra possível transformação: raiz quadrada - *sqrt*  
+
+```{r comment='>'}  
+dados.maduro$Total.sqrt <- sqrt(dados.maduro$Total)  
+anova.maduro.sqrt <- aov(Total.sqrt ~ Concentracao.cat,   
+    data=dados.maduro)  
+resid.maduro.sqrt <- resid(anova.maduro.sqrt)  
+hist(resid.maduro.sqrt)
+shapiro.test(resid.maduro.sqrt)
+plot(resid.maduro.sqrt ~ dados.maduro$Concentracao.cat)  
+```
+Não temos uma distribuição normal.  
+Temos heterogeneidade de variâncias, mas menos do que antes.  
+
+Ou seja, nem sempre transformações resolvem!  
+
+É provável que o melhor mesmo seja um teste não-paramétrico.  
+
+## Regressão linear  
+
+Podemos também trabalhar com a concentração como uma variável numérica, e fazer uma regressão linear.   
+Para isso, usamos a função *lm*.  
+
+*lm* vem de *linear model*, ou *modelo linear*.   
+Tem este nome porque usamos a fórmula de uma equação linear para modelar o efeito da concentração sobre o tamanho das plantas.  
+
+Vamos trabalhar sobre os dados não transformados, mas sabendo que as premissas provavelmente serão violadas.  
+
+```{r comment='>'}  
+regressao.maduro <- lm(Total ~ Concentracao, data=dados.maduro)  
+summary(regressao.maduro)
+```
+Reparem que é a mesma sintaxe que nas funções plot e aov!  
+
+Na parte Coefficients, o primeiro valor diz que o intercepto é de $54.8 \pm 1.5$, e é significativamente diferente de zero.   
+O segundo valor diz que a inclinação, ou seja, o efeito da concentração é de -$379.2 \pm 24.1$, e é significativamente diferente de zero.  
+Isso significa que, sem o extrato alelopático, espera-se que a plantinha tenha um tamanho de 54 cm.   
+Se a concentração aumenta de 0 para 1 (ou seja, de 0 para 100%), o tamanho vai reduzir em 379 cm.   
+Isso não faz sentido - mas temos concentrações variando de 0 a 0.1 (10%), ou seja, não podemos fazer inferências sobre concentrações maiores!  
+Ao aumentar a concentração de 0 para 0.1, espera-se que o tamanho das plantas diminua aproximadamente 38 cm.  
+
+Para visualizar isso graficamente:  
+
+```{r comment='>'}  
+plot(Total ~ Concentracao, data=dados.maduro)  
+abline(regressao.maduro) # Esta função traça a linha da regressão.  
+```
+
+Para testar as premissas:  
+
+
+Primeiro, criamos espaço para quatro gráficos, e a seguir usanmos o comando *plot* sobre o resultado da regressão:  
+```{r comment='>', fig.height=6, fig.width=6}  
+par(mfrow=c(2,2)) # Cria um espaço com duas linhas e duas colunas  
+plot(regressao.maduro) # Faz os gráficos de validação  
+```
+O primeiro gráfico mostra que temos heterogeneidade de resíduos e que temos uma certa variação residual - provavelmente o modelo linear não é o melhor.  
+O segundo mostra algum desvio da normalidade.  
+O terceiro é similar ao primeiro.  
+O último mostra se temos outliers. Se houvesse outliers, haveria uma linha vermelha pontilhada e pontos fora desta linha.  
+
+
+**Exercício:**
+Avalie o efeito do extrato de folhas jovens sobre o tamanho da parte epígea.   
+Compare os resultados da ANOVA e da regressão linear e teste as premissas.  
+
+ ## ANCOVA  
+
+Vamos tratar concentração agora como uma variável contínua.   
+
+Vamos trabalhar apenas com o extrato maduro, criando um subset:  
+
+```{r comment='>'}  
+dados.maduro <- subset(dados, Extrato=="Maduro")  
+str(dados.maduro) # Conferir se está tudo certo  
+# Ajustando uma regressão linear - para tamanho da raiz:  
+lm.raiz.maduro <- lm(Raiz ~ Concentracao, data=dados.maduro)  
+summary(lm.raiz.maduro)
+```
+Existe uma relação altamente significativa. R2=0.56 - a concentração explica 56% da variação.  
+
+Representação gráfica:  
+```{r comment='>'}  
+plot(Raiz ~ Concentracao, data=dados.maduro)  
+abline(lm.raiz.maduro)
+```
+A relação não é linear... Isso é um problema (o qual não teremos tempo de resolver neste curso).  
+
+Mas, será que existe uma diferença entre os extratos?  
+
+Vamos criar um objeto para o tamanho da raiz no extrato jovem e outro pro extrato maduro:  
+
+```{r comment='>'}  
+raiz.jovem <- subset(dados, Extrato=="Jovem")$Raiz  
+raiz.maduro <- subset(dados, Extrato=="Maduro")$Raiz  
+str(raiz.jovem)
+str(raiz.maduro)
+```
+Ambos são vetores númericos.  
+Para testar se há diferença, podemos fazer um teste t:  
+
+```{r comment='>'{  
+t.test(raiz.jovem, raiz.maduro)  
+```
+p=0.0022 - ou seja, há diferença significativa.  
+
+Será que existe interação? Ou seja, além de afetar tamanho médio, será que efeito da concentração varia entre os extratos?  
+
+Para isso, fazemos uma ANCOVA, usando a função lm:  
+
+```{r comment='>'}  
+ancova.raiz <- lm(Raiz ~ Concentracao + Extrato +   
+    Concentracao:Extrato, data=dados)  
+summary(ancova.raiz)
+```
+Incluímos as duas variáveis, Concentração e Tipo de extrato, nesta análise.   
+A expressão *Concentração:Extrato* indica que queremos também avaliar a interação estatística entre elas.  
+
+Existe um efeito significativamente diferente da concentração e do extrato, e uma interação marginalmente significativa (p=0.044).  
+
+Para representar graficamente: o mais fácil é ajustarmos duas regressões lineares...   
+Como já temos a do extrato maduro, vamos ajustar a do extrato jovem:  
+
+```{r comment='>'}  
+dados.jovem <- subset(dados, Extrato=="Jovem")  
+str(dados.jovem)
+lm.raiz.jovem <- lm(Raiz ~ Concentracao, data=dados.jovem)  
+```
+
+Ao fazer o gráfico: vamos diferenciar os tipos de extrato por cores:  
+
+```{r comment='>'}  
+plot(Raiz ~ Concentracao, data=dados, pch=21,   
+    bg=ifelse(Extrato=="Jovem","purple","orange"))  
+```
+*pch=21* significa que os símbolos são bolinhas preenchidas.  
+O comando ifelse tem a forma "se teste for verdadeiro, uma coisa, caso contrário, outra coisa." Neste caso: se o valor da coluna *Extrato* foi igual a "Jovem", a cor vai ser "purple", caso  contrário a cor vai ser "orange".  
+
+Como temos sobreposição, podemos adicionar também um jitter:  
+
+```{r comment='>'}  
+plot(Raiz ~ jitter(Concentracao), data=dados, pch=21,   
+    bg=ifelse(Extrato=="Jovem","purple","orange"))  
+```
+
+Podemos também colocar as marcas do eixo X apenas onde temos valores  
+
+```{r comment='>'}  
+plot(Raiz ~ jitter(Concentracao), data=dados, pch=21,   
+    bg=ifelse(Extrato=="Jovem","purple","orange"),  
+    xaxt="n")  
+axis(side=1, at=c(0,0.025,0.050,0.075,0.100))  
+```
+
+O argumento *xaxt="n"* exclui as marcas do eixo X;  
+A função *axis* adiciona um eixo.;  
+O argumento *side=1* diz que o eixo fica embaixo do gráfico.  
+(Para adicionar ele à esquerda, seria side=2; em cima, side=3; à direita, side=4).  
+O argumento *at* determina onde serão colocadas as marcas.  
+
+E finalmente, podemos dar nomes bonitinhos aos eixos:  
+
+```{r comment='>'}  
+plot(Raiz ~ jitter(Concentracao), data=dados, pch=21,   
+    bg=ifelse(Extrato=="Jovem","purple","orange"),  
+    xaxt="n", xlab="Concentração",   
+    ylab = "Comprimento da raiz (cm)")  
+axis(side=1, at=c(0,0.025,0.050,0.075,0.100))  
+```
+
+Agora, vamos fazer novamente o gráfico (basta repetir o código anterior), e adicionar também os resultados das duas regressões usando o comando *abline*:  
+
+```{r comment='>'}  
+plot(Raiz ~ jitter(Concentracao), data=dados, pch=21,   
+    bg=ifelse(Extrato=="Jovem","purple","orange"),  
+    xaxt="n", xlab="Concentração",   
+    ylab = "Comprimento da raiz (cm)")  
+axis(side=1, at=c(0,0.025,0.050,0.075,0.100))  
+
+abline(lm.raiz.maduro, col="orange", lwd=2)  
+abline(lm.raiz.jovem, col="purple", lwd=2)  
+#col define a cor, lwd define a largura da linha  
+```
+
+Podemos também adicionar uma legenda; vamos fazer novamente o gráfico, copiando os comandos anteriores, a adicionar uma legenda usando o comando *legend*:  
+
+```{r comment='>'}  
+
+# Se quisermos adicionar um legenda, usamos o comando legend:  
+plot(Raiz ~ jitter(Concentracao), data=dados, pch=21,   
+    bg=ifelse(Extrato=="Jovem","purple","orange"),  
+    xaxt="n", xlab="Concentração",   
+    ylab = "Comprimento da raiz (cm)")  
+axis(side=1, at=c(0,0.025,0.050,0.075,0.100))  
+
+abline(lm.raiz.maduro, col="orange", lwd=2)  
+abline(lm.raiz.jovem, col="purple", lwd=2)  
+
+legend(x=0.06, # localização horizontal da legenda  
+    y=50, # localização vertical da legenda  
+    legend = c("Extrato de folhas jovens",   
+        "Extrato de folhas maduras"), # texto da legenda  
+    pch=21, # forma das bolinhas  
+    pt.bg = c("purple", "orange"),) # preenchimento das bolinhas  
+```
+Para mais informações sobre como colocar legenda, veja o help: *?legend*  
+
+E será que as premissas estão sendo satisfeitas?  
+Vamos extrair os resíduos do modelo e faer os testes:  
+
+```{r comment='>'}  
+resid.raiz <- resid(ancova.raiz)  
+hist(resid.raiz) # Parece normal...  
+shapiro.test(resid.raiz)   
+```
+O teste indica fortes desvios de normalidade!  
+
+```{r comment='>'}  
+predict.raiz <- predict(ancova.raiz)  
+plot(resid.raiz ~ predict.raiz)  
+```
+
+Santa heteroscedasticidade, Batman!  
+
+Uma possibilidade é transformar os valores de comprimento em raiz quadrada, usando a função *sqrt*, e trabalhar com os valores transformados.  
+
+
+**Exercício:**   
+Façam esta análise para o comprimento da raiz transformados em raiz quadrada.  
+**Outro exercício**  
+Façam esta análise para o tamanho da parte epígea.  
+
+
+
+## Teste t pareado  
+
+
+Em alguns casos, queremos comparar duas amostras em que a cada valor de uma tem um valor correspondente na outra.  
+
+Por exemplo, podemos querer comparar o tamanho das mesmas plantas em dois anos diferentes.  
+
+Estes são dados de altura (cm) de alguns indivíduos de quaresmeira-branca (*Miconia albicans*, Melastomataceae) em uma área de cerrado, em dois anos diferentes (2008 e 2009):  
+
+```{r comment='>'}  
+altura1 <-  c(95, 125, 99, 85, 142, 155, 160, 75, 137,108,46,38,170,  
+    122,130,63,158,150,93,34,87,118,84,144,119,63,63)  
+
+altura2 <- c(110,126,95,116,185,170,180,76,160,102,31,42,180,125,132,  
+    74,160,150,90,28,114,136,74,170,132,66,79)  
+```
+
+O objetivo é ver se cada indivíduo cresceu de um ano para outro. Ou seja, não queremos ver a diferença nas alturas médias, mas queremos ver se há uma tendência para cada indivíduo aumentar de altura.  
+
+Para fazer um gráfico, precisamos fazer alguns passos adicionais:  
+
+Vemos quantas plantas temos:  
+
+```{r comment='>'}  
+Nplantas <- length(altura1)  
+```
+
+Temos 27 plantas. Vamos criar então um objeto mostrando o ano de cada medição:  
+
+```{r comment='>'}  
+anos <- rep(c(2008, 2009), each=Nplantas)  
+```
+
+Este comando vai repetir 2008 27 vezes e depois 2009 27 vezes.  
+
+Agora juntamos as duas alturas em um objeto:  
+
+```{r comment='>'}  
+alturas <- c(altura1, altura2)  
+```
+
+E fazemos um *jitter plot*:  
+
+```{r comment='>'}  
+plot(alturas ~ jitter(anos))  
+```
+
+Reparem que tem muita variação na altura das plantas... Então provavelmente o crescimento de cada uma delas é menor do que a variação média.  
+
+```{r comment='>'}  
+mean(altura1) - mean(altura2)  
+```
+
+A diferença em altura média é de apenas 8 cm  
+
+```{r comment='>'}  
+range(altura1)
+```
+Mas as alturas em 2007 variam de 37 a 170 cm!  
+
+Se fizermos um teste t...  
+```{r comment='>'}  
+t.test(altura1, altura2)  
+```
+O p-valor de 0.45 indica não haver diferença na altura média.  
+
+Mas na verdade queremos saber se cada planta cresceu, e não se a altura média delas aumentou.  
+
+Podemos representar isso graficamente juntando os pontos correspondentes a cada planta entre os dois gráficos...  
+
+Para que o jitter seja o mesmo nos dois lados, criamos um objeto com ruído aleatório e um número de valores equivalente ao nosso número de plantas:  
+
+```{r comment='>'}  
+jitter.temp <- runif(27, min=-0.2, max=0.2)   
+```
+
+E adicionamos ele aos nossos anos; os 27 valores serão adicionados a cada ano.  
+
+```{r comment='>'}  
+anos.jitter <- anos + jitter.temp  
+anos.jitter # só para vermos os valores que serão usados no gráfico  
+```
+
+Fazemos o gráfico:  
+```{r comment='.'}  
+plot(alturas ~ anos.jitter)  
+```
+
+O espalhamento pelo eixo X agora é o mesmo dos dois lados.  
+Para ver a relação entre pontos, podemos adicionar linhas conectando cada ponto entre os dois anos. Mas precisamos fazer uns malabarismos antes...  
+
+Primeiro, vamos adicionar o nosso jitter aos nossos anos individualmente:  
+
+```{r comment='>'}  
+ano1.jitter <- 2008 + jitter.temp  
+ano2.jitter <- 2009 + jitter.temp  
+```
+
+Vejam que os primeiros valores de anos.jitter são iguais aos primeiros valores de ano1.jitter:  
+
+```{r comment='>'}  
+head(ano1.jitter)
+head(anos.jitter)
+```
+
+E os últimos correspondem a ano2.jitter:  
+
+```{r comment='>'}  
+tail(ano2.jitter)
+tail(anos.jitter)
+```
+
+Então, podemos fazer novamente o gráfico adicionar segmentos de reta:  
+
+```{r comment='>'}  
+plot(alturas ~ anos.jitter)  
+segments(x0 = ano1.jitter, # o x de onde começa  
+        y0 = altura1, # o y de onde começa,  
+        x1 = ano2.jitter, # o x de onde termina,  
+        y1 = altura2, # o y de onde termina  
+        col="gray") # a cor das linhas  
+```
+
+Cada linha conecta os pontos correspondentes à mesma planta.  
+A maior parte das linhas é inclinada para cima - então parece que as nossas plantinhas cresceram, mesmo que pouco!  
+
+E eu sei que este código parece mais complicado do que uma receita de poção que você encontraria no caderno do professor Snape, então gaste um tempinho para entender tudo que foi feito aqui e por que isso foi feito. :-)  
+
+Podemos testar a diferença no tamanho das plantas individuais usando o teste t pareado:  
+
+```{r comment='>'}  
+t.test(altura1, altura2, paired=TRUE)  
+```
+
+Este teste leva em conta a informação de que nós temos as mesmas plantas, medidas em dois anos diferentes.  
+O p-valor de 0.002 indica que há uma diferença significativa - no geral as plantinhas cresceram de um ano para o ano seguinte!  
+
+**Exercício:**
+Melhore o gráfico. Modifique o eixo X dele, os nomes dos eixos, se quiser pode deixar ele colorido. Dê um título a ele.  
+
+
+## Tabelas de contingência e qui-quadrado  
+
+Digamos agora que você quer saber se existe uma associação entre duas variáveis categóricas.  
+
+Por exemplo você quer saber se a cor de dragões está associada à presença de chifres neles.  
+
+(Cansei de usar dados reais e decidi colocar dragões pra relaxar).  
+
+Então você tem os seguintes dados:  
+
+```{r comment='>'}  
+
+cores <- c("Verde","Verde","Verde","Vermelho","Verde","Vermelho", 
+    "Vermelho","Vermelho","Vermelho","Verde","Verde","Vermelho",
+    "Vermelho","Vermelho","Vermelho","Vermelho","Vermelho","Verde",  
+    "Verde","Verde","Verde")  
+chifre <- c(1,1,1,0,1,1,1,0,0,1,0,0,0,0,0,1,0,1,1,0,1)  
+```
+
+Temos dados de 14 dragões; 1 indica presença de chifre e 0 indica ausência.  
+
+Podemos usar a função table para contar quantos de cada cor temos:  
+
+```{r comment='>'}  
+table(cores)
+```
+E também para contar quantos temos com e sem chifre:  
+
+```{r comment='>'}  
+table(chifre)
+```
+
+Também podemos usar a função table para avaliar as duas variáveis juntas:  
+
+```{r comment='>'}  
+table(cores, chifre)  
+```
+
+Ela nos diz que: temos 2 verdes sem chifre, 8 verdes com chifre, 8 vermelhos sem chifre e 3 vermelhos com chifre.  
+
+O nome dessa tabela é **tabela de contingência**.  
+Ela tem esse nome porque ela mostra, por exemplo, quantos dragões têm a cor vermelha, contingente com o fato de terem chifre.  
+
+Pela tabela, parece que há uma associação entre as variáveis:  
+Dragões vermelhos têm mais chances de não terem chifre.  
+
+Para testar isso, usamos o teste de qui-quadrado.  
+Primeiro, armazenamos a tabela de contingência em um objeto:  
+
+```{r comment='>'}  
+tabela <- table(cores, chifre)  
+```
+
+E fazemos o teste:  
+
+```{r comment='>'}  
+chisq.test(tabela)
+```
+
+Obtemos um p-valor de 0.048, que indica haver associação marginalmente significativa entre as variáveis.  
+
+Mas, qui-quadrado não é muito confiável quando temos menos de cinco observações em alguma parte da tabela (como os 2 dragões verdes sem chifre).  
+
+Nestes casos, uma alternativa é usar o teste exato de Fisher:  
+
+```{r comment='>'}  
+fisher.test(tabela)
+```
+
+Dá um p-valor de 0.03, indicando que, aparentemente, existe uma associação, e chifres são mais comuns em dragões verdes.  
+
+# Acabou!  
+
+Este é o fim deste tutorial, mas, caso você não tenha ficado muito traumatizada/o com o R, espero que não seja o fim do seu aprendizado nele! O R é lindo e dá pra se divertir fazer coisas nele depois que se pega o jeito; além de ser muito útil para fazer gráficos, tabelas e outras coisas!  
